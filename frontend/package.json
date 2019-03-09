@@ -1,0 +1,30 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Client app",
+  "main": "./src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --content-base ./public",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SzymonWelter/Authentication-and-Authorization.git"
+  },
+  "keywords": [],
+  "author": "Szymmon\u001b[D\u001b[\u001b[C\u001b[C\u001b[\u001b[2~on\u001b[DnWelter",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "dependencies": {
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
+  }
+}
