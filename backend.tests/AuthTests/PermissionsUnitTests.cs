@@ -6,11 +6,15 @@ namespace backend.tests.AuthTests
 {
     public class PermissionsUnitTests
     {
-        private readonly Permissions permissions;
+
         [Fact]
-        public void Test1()
-        {
-            
+        public void TestPermission()
+        {    
+            bool arg = false;
+            Permission permission = new Permission(1,arg,!arg,!arg,arg);
+            Assert.False(permission.PermissionRequest(new Permission(1,!arg,arg,arg,arg)));
+            Assert.True(permission.PermissionRequest(new Permission(1,arg,!arg,arg,arg)));
+            Assert.False(permission.PermissionRequest(new Permission(2,arg,!arg,arg,arg)));
         }
     }
 }
