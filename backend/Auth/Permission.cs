@@ -2,6 +2,14 @@ namespace backend.Auth
 {
     public class Permission : IPermission
     {
+        public Permission(int id, bool create, bool display, bool edit, bool remove){
+            Id = id;
+            Create = create;
+            Display = edit ? edit : display;
+            Edit = edit;
+            Remove = remove;
+        }
+
         public int Id { get ; set ; }
         public bool Create { get; set; }
         public bool Display { get; set; }   
@@ -14,8 +22,9 @@ namespace backend.Auth
                 return false;
 
             var perm = (Permission) permission;
-            return (!perm.Create || Create) &&
-                (!perm.Display || Display) &&
+            return (perm.Id == Id) &&
+                (!perm.Create || Create) &&
+                (Edit || (!perm.Display || Display)) &&
                 (!perm.Edit || Edit) &&
                 (!perm.Remove || Remove);
         }

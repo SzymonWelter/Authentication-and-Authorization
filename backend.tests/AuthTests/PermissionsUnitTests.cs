@@ -12,32 +12,16 @@ namespace backend.tests.AuthTests
         [Fact]
         public void TestPermission()
         {    
-            bool arg = false;
-            Permission permission = new Permission(1,arg,!arg,arg,!arg);
-            Assert.False(permission.PermissionRequest(new Permission(1,arg,arg,!arg,!arg)));
-            Assert.False(permission.PermissionRequest(new Permission(2,arg,!arg,arg,!arg)));
-            Assert.False(permission.PermissionRequest(new Permission(1,!arg, arg, arg, arg)));
-            Assert.True(permission.PermissionRequest(new Permission(1,arg,!arg,arg,!arg)));
-            Assert.True(permission.PermissionRequest(new Permission(1,arg,!arg,arg,arg)));
-            Assert.True(permission.PermissionRequest(new Permission(1,arg,arg,arg,!arg)));
-        }
-
-        [Fact]
-        public void TestPermissions(){
-            bool arg = false;
-            Permissions permissions = new Permissions();
-            var permList = (List<IPermission>)permissions.PermissionsCollection;
-            permList.Add(new Permission(1,!arg,!arg,!arg,arg));
-            permList.Add(new Permission(2,!arg,!arg,arg,arg));
-            permList.Add(new Permission(3,arg,!arg,arg,arg));
-            permList.Add(new Permission(4,arg,arg,!arg,arg));
-            permList.Add(new Permission(5,arg,!arg,arg,!arg));
-
-            Assert.True(permissions.PermissionRequest(new Permission(5,arg,!arg,arg,!arg)));
-            Assert.True(permissions.PermissionRequest(new Permission(4,arg,!arg,arg,arg)));
-            Assert.False(permissions.PermissionRequest(new Permission(3,arg,arg,!arg,arg)));
-            Assert.False(permissions.PermissionRequest(new Permission(2,!arg,arg,!arg,!arg)));
-            
+            Permission permission = new Permission(1,false, false, false, false);
+            permission.Edit = true;
+            Assert.True(permission.PermissionRequest(new Permission(1,false, true, false, false)));
+            Assert.True(permission.PermissionRequest(new Permission(1,false, true, true, false)));
+            Assert.True(permission.PermissionRequest(new Permission(1,false, false, true, false)));
+            Assert.False(permission.PermissionRequest(new Permission(1,false, true, false, true)));
+            Assert.False(permission.PermissionRequest(new Permission(2,false,false,true,false)));
+            permission.Edit = false;
+            permission.Display = true;
+            Assert.False(permission.PermissionRequest(new Permission(1,false,false,true,false)));
         }
     }
 }
