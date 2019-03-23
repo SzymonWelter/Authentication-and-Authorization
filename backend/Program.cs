@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Grpc.Core;
 
 namespace backend
 {
@@ -14,11 +11,18 @@ namespace backend
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            const int port = 50000;
+            Server server = new Server{
+                Services = {Test.BindService(new TestImpl())},
+                Ports = {new ServerPort("localhost", port, ServerCredentials.Insecure)}
+            };
+            server.Start();
+            Console.WriteLine("RouteGuide server listening on port " + port);
+            Console.WriteLine("Press any key to stop the server...");
+            Console.ReadKey();
+
+            server.ShutdownAsync().Wait();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
     }
 }
