@@ -1,2 +1,0 @@
-obj\Debug\netcoreapp3.0/Authentication.cs \
-obj\Debug\netcoreapp3.0/AuthenticationGrpc.cs: ../../../protos/Authentication.proto
