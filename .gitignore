@@ -1,5 +1,6 @@
-Backend/obj
-Backend/bin
-Backend.tests/PseudoClient/PseudoClient/obj
-Backend.tests/PseudoClient/PseudoClient/bin
-frontend/node_modules
+Backend/obj/
+Backend/bin/
+Backend.tests/PseudoClient/PseudoClient/obj/
+Backend.tests/PseudoClient/PseudoClient/bin/
+frontend/node_modules/
+frontend/dist/
