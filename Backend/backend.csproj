@@ -5,13 +5,14 @@
     <GenerateUserSecretsAttribute>false</GenerateUserSecretsAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <Protobuf Include="..\protos\*.proto" GrpcServices="Server" Generator="MSBuild:Compile"/>
-    <Content Include="@(Protobuf)" LinkBase=""/>
+    <Protobuf Include="..\protos\*.proto" GrpcServices="Server" Generator="MSBuild:Compile" />
+    <Content Include="@(Protobuf)" LinkBase="" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="0.1.19-pre1"/>
-    <PackageReference Include="Google.Protobuf" Version="3.7.0"/>
-    <PackageReference Include="Grpc.Tools" Version="1.19.0"/>
-    <PackageReference Include="Grpc.Core" Version="1.19.0"/>
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="0.1.19-pre1" />
+    <PackageReference Include="Google.Protobuf" Version="3.7.0" />
+    <PackageReference Include="Grpc.Tools" Version="1.19.0" />
+    <PackageReference Include="Grpc.Core" Version="1.19.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
   </ItemGroup>
 </Project>
