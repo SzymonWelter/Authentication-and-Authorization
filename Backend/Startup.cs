@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -58,6 +59,10 @@ namespace Backend
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
+            });
             ConfigureAuth(services);
             // TODO DBContext
         }
@@ -83,10 +88,12 @@ namespace Backend
                 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggingBuilder loggerBuilder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            loggerBuilder.AddDebug();
-
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(_tokenProviderOptions));
             app.UseAuthentication();
             app.UseRouting(routes =>

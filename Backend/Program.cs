@@ -15,15 +15,16 @@ namespace Backend
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.ConfigureKestrel(options =>
+                    webBuilder.UseStartup<Startup>()
+                    .ConfigureKestrel(options =>
                     {
                         options.Limits.MinRequestBodyDataRate = null;
                         options.ListenLocalhost(50051, listenOptions =>
                         {
                             listenOptions.Protocols = HttpProtocols.Http2;
                         });
-                    })
-                .UseStartup<Startup>();
+                    });
                 });
+           
     }
 }
