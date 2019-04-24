@@ -1,9 +1,9 @@
 Backend/obj/
 Backend/bin/
 Backend/Migrations/
-Backend/.vs
+Backend/.vs*
 Backend/*.db
-.vs/
+.vs*
 Backend.tests/PseudoClient/PseudoClient/obj/
 Backend.tests/PseudoClient/PseudoClient/bin/
 frontend/node_modules/
