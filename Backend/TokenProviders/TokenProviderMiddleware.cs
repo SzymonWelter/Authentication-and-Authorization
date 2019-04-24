@@ -30,7 +30,7 @@ namespace Backend
             {
                 return _next(context);
             }
-            if (context.Request.Method.Equals("GET") && context.Request.HasFormContentType)
+            if (context.Request.Method.Equals("POST") && context.Request.HasFormContentType)
                 return GenereteToken(context);
             context.Response.StatusCode = 400;
             return context.Response.WriteAsync("Bad request");

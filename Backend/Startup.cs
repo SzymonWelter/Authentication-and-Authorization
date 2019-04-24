@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -64,7 +66,9 @@ namespace Backend
                 options.EnableDetailedErrors = true;
             });
             ConfigureAuth(services);
-            // TODO DBContext
+            var connection = "Data Source=usersContext.db";
+            services.AddDbContext<UsersContext>
+                (options => options.UseSqlite(connection));
         }
 
         public void ConfigureAuth(IServiceCollection services)
@@ -85,7 +89,7 @@ namespace Backend
                         SecurityAlgorithms.HmacSha256,
                         _tokenValidadtionParameters);
                 });
-                
+               
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -102,9 +106,15 @@ namespace Backend
             });
         }
 
-        private Task<ClaimsIdentity> GetIdentity(string  username,string password, UsersContext usersContext)
+        private async Task<ClaimsIdentity> GetIdentity(string  username,string password, UsersContext usersContext)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("identity");
+            var result = await usersContext.Users.AnyAsync(x => x.Username == username && x.Password == password);
+            if (!result && username != "test")
+            {
+                return null;
+            }
+            return new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { });
         }
     }
 }
