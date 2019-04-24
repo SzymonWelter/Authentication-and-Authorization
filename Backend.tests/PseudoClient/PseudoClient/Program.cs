@@ -18,7 +18,7 @@ namespace PseudoClient
             var channel = new Channel("localhost:" + port, ChannelCredentials.Insecure);
             var client = new Authentication.AuthenticationClient(channel);
 
-            var reply = await client.AuthenticateAsync(new User(){Username = "welters", Password = "xxx", RememberMe = true});
+            var reply = await client.AuthenticateAsync(new User(){Username = "test", Password = "xxx", RememberMe = true});
             Console.WriteLine("Response: " + reply.Status);
 
             await channel.ShutdownAsync();
