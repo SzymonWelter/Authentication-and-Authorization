@@ -60,7 +60,7 @@ namespace Backend
         }
 
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;

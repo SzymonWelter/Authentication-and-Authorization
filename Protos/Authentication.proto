@@ -1,16 +1,27 @@
 syntax = "proto3";
 
 service Authentication{
-    rpc Authenticate (User) returns (AuthResponse) {}
+    rpc SignIn (SignInUserData) returns (AuthResponse) {}
+	rpc SignUp (SignUpUserData) returns (AuthResponse) {}
 }
 
-message User {
+message SignInUserData {
     string username = 1;
     string password = 2;
-    bool rememberMe = 3;
+}
+
+message SignUpUserData{
+	string username = 1;
+	string password = 2;
+	string email = 3;
+	string phoneNumber = 4;
+	string name = 5;
+	string surname = 6;
+	string education = 7;
+	string position = 8;
 }
 
 message AuthResponse {
     int32 status = 1;
-    string extraInfo = 2;
+    string token = 2;	
 }
