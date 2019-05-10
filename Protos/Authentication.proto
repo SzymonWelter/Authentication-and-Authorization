@@ -23,5 +23,5 @@ message SignUpUserData{
 
 message AuthResponse {
     int32 status = 1;
-    string token = 2;	
+    string token = 2;
 }
