@@ -21,7 +21,7 @@ namespace Backend
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            Configuration = builder.Build();           
+            Configuration = builder.Build();
         }
 
         public void ConfigureServices(IServiceCollection services)
