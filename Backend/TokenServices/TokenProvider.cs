@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Backend
 {
@@ -16,12 +17,12 @@ namespace Backend
 
         public string GetToken(TokenData tokenData)
         {
-
+            throw new NotImplementedException();
         }
 
         public TokenData EncodeToken(string token)
         {
-
+            throw new NotImplementedException();
         }
 
 

@@ -10,59 +10,88 @@ namespace backend.TokenServices
     {
         public byte [] Message { get; set; }
         public byte [] Divisor { get; set; }
-        public int CrcLength { get => Divisor.Length * 8 - 1; }
 
-
+        private int position = 0;
+        private int BytePosition => position / 8;
+        private byte Mask => (byte)Math.Pow(2, 7 - (position % 8));
         public byte [] Encode() //returns token+crc
         {
-            var codeCreator = new List<byte>(Message);            
-            codeCreator.AddRange(new byte[CrcLength]);
+            position = 0;
+            var codeCreator = new List<byte>(Message); // Message = n bytes + 1 bit, 7 bit is already part of crc           
+            codeCreator.AddRange(new byte[Divisor.Length - 1]); //Divisor.Length - 1 because 7 bits was added in line before
             var code = codeCreator.ToArray();
-            int i = 0;
-            while (IsNextStep())
+            var polynomial = new byte[code.Length];
+            for(int i = 0; i < Divisor.Length; i++)
             {
-                code = Xor(code,i++);// xor bit by bit
+                polynomial[i] = Divisor[i];
             }
-            return code;
+
+            ChangePosition(code, polynomial);
+            while (IsNextStep())
+            {                
+                code = Xor(code, polynomial);// xor bit by bit               
+                ChangePosition(code, polynomial);
+            }
+            for(int i = 1; i <= Divisor.Length; i++)
+            {
+                codeCreator[codeCreator.Count-i] += code[^i]; 
+            }
+            return codeCreator.ToArray();
         }
-        public byte[] Encode(byte[] divisor) //returns token+crc
+
+        private void ChangePosition(byte [] code, byte[] polynomial)
+        {          
+            while( BytePosition < code.Length && (Mask & code[BytePosition]) == 0)
+            {
+                RightShift(polynomial);
+                position++;
+            }
+            
+        }
+
+        private void RightShift(byte[] polynomial)
         {
-            Divisor = divisor;
-            return Encode();
+            for(int i = polynomial.Length-1; i > BytePosition; i--)
+            {
+                polynomial[i] = (byte)(polynomial[i] >> 1);
+                polynomial[i] += (byte)(polynomial[i - 1] % 2 == 0 ? 0 : 128);               
+            }
+            polynomial[BytePosition] = (byte)(polynomial[BytePosition] >> 1); 
         }
+
 
         private bool IsNextStep()
         {
-            
-            
+            return position <= (Message.Length - 1) * 8; 
         }
 
-        private byte [] Xor(byte [] data)
+        private byte [] Xor(byte [] data, byte [] polynomial)
         {
-            if (data.Length != Divisor.Length) {
-                throw new ArgumentException("The length of both arrays must be the same");
-            }
-            for(int i = 0; i < data.Length; i++)
+            for(int i = data.Length - 1; i >= BytePosition; i--)
             {
-                data[i] = (byte) (data[i] ^ Divisor[i]);
+                data[i] = (byte)(data[i] ^ polynomial[i]);
             }
-            return data;        
+            return data;
         }
 
-        private byte [] Xor(byte[] data, int offset){
-            //TODO
-            //1) left rotation
-            //2) remove first bit
-            //3) add new bit
-            //4) xor with Divisor
-            //5) return result 
-            throw new NotImplementedException();
-        }
 
         public bool Valid(byte[] token, byte [] polynomial)
         {
-            var result = Encode(polynomial);
-            return result.All(x => x == 0);
+            position = 0;
+            Divisor = polynomial;
+            Message = token.Take(token.Length-polynomial.Length+1).ToArray();
+            polynomial = new byte[token.Length];
+            for (int i = 0; i < Divisor.Length; i++)
+            {
+                polynomial[i] = Divisor[i];
+            }
+            ChangePosition(token, polynomial);
+            while (IsNextStep())
+            {
+                token = Xor(token, polynomial);// xor bit by bit               
+                ChangePosition(token, polynomial);
+            }
+            return token.All(x => x == 0);
         }
     }
 }

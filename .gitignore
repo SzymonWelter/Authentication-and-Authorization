@@ -8,3 +8,5 @@ Backend.tests/PseudoClient/PseudoClient/obj/
 Backend.tests/PseudoClient/PseudoClient/bin/
 frontend/node_modules/
 frontend/dist/
+Backend.tests/obj/
+Backend.tests/bin/

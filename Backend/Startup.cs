@@ -42,9 +42,9 @@ namespace Backend
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseRouting(routes =>
+            app.UseEndpoints(e =>
             {
-                routes.MapGrpcService<AuthenticationService>();
+                e.MapGrpcService<AuthenticationService>();
             });
         }
     }
