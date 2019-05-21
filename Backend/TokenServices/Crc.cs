@@ -8,8 +8,8 @@ namespace backend.TokenServices
 {
     public class Crc
     {
-        public byte [] Message { get; set; }
-        public byte [] Divisor { get; set; }
+        public byte [] Message { get; set; } 
+        public byte [] Divisor { get; set; } //4 bytes
 
         private int position = 0;
         private int BytePosition => position / 8;
@@ -17,14 +17,16 @@ namespace backend.TokenServices
         public byte [] Encode() //returns token+crc
         {
             position = 0;
-            var codeCreator = new List<byte>(Message); // Message = n bytes + 1 bit, 7 bit is already part of crc           
-            codeCreator.AddRange(new byte[Divisor.Length - 1]); //Divisor.Length - 1 because 7 bits was added in line before
+            var codeCreator = new List<byte>(Message);        
+            codeCreator.AddRange(new byte[Divisor.Length]);
             var code = codeCreator.ToArray();
             var polynomial = new byte[code.Length];
             for(int i = 0; i < Divisor.Length; i++)
             {
                 polynomial[i] = Divisor[i];
             }
+            RightShift(polynomial);
+            polynomial[0] += 128; // first bit must be one
 
             ChangePosition(code, polynomial);
             while (IsNextStep())
@@ -62,7 +64,7 @@ namespace backend.TokenServices
 
         private bool IsNextStep()
         {
-            return position <= (Message.Length - 1) * 8; 
+            return position < (Message.Length) * 8; 
         }
 
         private byte [] Xor(byte [] data, byte [] polynomial)
@@ -75,16 +77,18 @@ namespace backend.TokenServices
         }
 
 
-        public bool Valid(byte[] token, byte [] polynomial)
+        public bool Valid(byte[] token, byte [] polynomial) //first bit of token must be one
         {
             position = 0;
             Divisor = polynomial;
-            Message = token.Take(token.Length-polynomial.Length+1).ToArray();
+            Message = token.Take(token.Length-polynomial.Length).ToArray();
             polynomial = new byte[token.Length];
             for (int i = 0; i < Divisor.Length; i++)
             {
                 polynomial[i] = Divisor[i];
             }
+            RightShift(polynomial);
+            polynomial[0] += 128; // first bit must be one
             ChangePosition(token, polynomial);
             while (IsNextStep())
             {
