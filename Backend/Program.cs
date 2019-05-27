@@ -10,11 +10,7 @@ namespace Backend
     {
         public static void Main(string[] args)
         {
-            var crc = new Crc() { Message = new byte[] { 101, 111, 51, 14, 81, 12, 128 }, Divisor = new byte[] { 11, 168, 8, 101 } };
-            var result = crc.Encode();
-            var isvalid = crc.Valid(result, new byte[] { 11, 168, 8, 101 });
-            Console.WriteLine(isvalid);
-            //CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -33,6 +33,7 @@ namespace Backend
             var connection = "Data Source=usersContext.db";
             services.AddDbContext<UsersContext>
                 (options => options.UseSqlite(connection));
+            services.AddSingleton<TokenProvider>();
            
         }
 
@@ -42,7 +43,7 @@ namespace Backend
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseEndpoints(e =>
+            app.UseRouting(e =>
             {
                 e.MapGrpcService<AuthenticationService>();
             });

@@ -3,6 +3,7 @@ syntax = "proto3";
 service Authentication{
     rpc SignIn (SignInUserData) returns (AuthResponse) {}
 	rpc SignUp (SignUpUserData) returns (AuthResponse) {}
+	rpc AuthTest(SignUpUserData) returns(AuthResponse){}
 }
 
 message SignInUserData {
